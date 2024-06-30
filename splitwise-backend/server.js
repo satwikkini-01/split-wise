@@ -50,21 +50,42 @@ app.post('/api/expenses', async (req, res) => {
     const [result] = await connection.query(insertExpenseQuery, insertExpenseParams);
     const expenseId = result.insertId;
 
+    const getBalQuery = 'SELECT balance FROM balances WHERE user_id = ?';
+    const getBalParams = [p];
+    const [balResult] = await connection.query(getBalQuery, getBalParams);
+
+    const currentOwe = balResult.length > 0 ? balResult[0].balance : 0;
+    const newOwe = currentOwe + amount;
+
+    const balUpdateQuery = 'UPDATE balances SET balance = ? WHERE user_id = ?';
+    const balUpdateParams = [newOwe, p];
+    await connection.query(balUpdateQuery, balUpdateParams);
+
     const [recentExpense] = await connection.query('SELECT id FROM expenses ORDER BY id DESC LIMIT 1');
     const recentExpenseId = recentExpense[0].id;
     for (let participant of participants) {
-      let participantId;
-      if(participant === 'satwik') participantId = 1;
-      else if(participant === 'manu') participantId = 2;
-      else if(participant === 'chetan') participantId = 3;
-      else if(participant === 'kushal') participantId = 4;
-      else if(participant === 'krishna') participantId = 5;
-      else if(participant === 'rishikesh') participantId = 6;
-      else if(participant === 'prajna') participantId = 7;
-      
-      const insertDistributionQuery = 'INSERT INTO expense_distribution (expense_id, participant, amount_paid, participant_name) VALUES (?, ?, ?, ?)';
-      const insertDistributionParams = [recentExpenseId, participantId, splitAmount, participant];
-      await connection.query(insertDistributionQuery, insertDistributionParams);
+        let participantId;
+        if(participant === 'satwik') participantId = 1;
+        else if(participant === 'manu') participantId = 2;
+        else if(participant === 'chetan') participantId = 3;
+        else if(participant === 'kushal') participantId = 4;
+        else if(participant === 'krishna') participantId = 5;
+        else if(participant === 'rishikesh') participantId = 6;
+        else if(participant === 'prajna') participantId = 7;
+        
+        const insertDistributionQuery = 'INSERT INTO expense_distribution (expense_id, participant, amount_paid, participant_name) VALUES (?, ?, ?, ?)';
+        const insertDistributionParams = [recentExpenseId, participantId, splitAmount, participant];
+        await connection.query(insertDistributionQuery, insertDistributionParams);
+
+        const getBalQuery = 'SELECT owe FROM balances WHERE user_id = ?';
+        const getBalParams = [participantId];
+        const [balResult] = await connection.query(getBalQuery, getBalParams);
+        const currentOwe = balResult.length > 0 ? balResult[0].owe : 0;
+        const newOwe = currentOwe + splitAmount;
+
+        const balUpdateQuery = 'UPDATE balances SET owe = ? WHERE user_id = ?';
+        const balUpdateParams = [newOwe, participantId];
+        await connection.query(balUpdateQuery, balUpdateParams);
     }
 
     await connection.commit();

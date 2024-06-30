@@ -19,16 +19,19 @@ const Navbar = () => {
   }, []);
 
   return (
-    <header className="App-header">
-      <h1>Splitwise Clone</h1>
-      {balances.map((userBalance) => (
-        <div key={userBalance.userId} className="balance-info">
-          <p>User ID: {userBalance.userId}</p>
-          <p>Your Balance: ₹{parseFloat(userBalance.balance).toFixed(2)}</p>
-          <p>Total Owed: ₹{parseFloat(userBalance.owed).toFixed(2)}</p>
-        </div>
-      ))}
-    </header>
+    <div className="Main-Header">
+      <header className="App-header">
+        <h1>Splitwise Clone</h1>
+        {balances.map((userBalance) => (
+          <div key={userBalance.userId} className="balance-info">
+            <p>User ID: {userBalance.userId}</p>
+            <p>Your Balance: ₹{parseFloat(userBalance.balance).toFixed(2)}</p>
+            <p>Total Owed: ₹{parseFloat(userBalance.owed).toFixed(2)}</p>
+          </div>
+        ))}
+      </header>
+    </div>
+    
   );
 };
 

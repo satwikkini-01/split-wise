@@ -81,13 +81,12 @@ app.post('/api/expenses', async (req, res) => {
 
 app.get('/api/balance', async (req, res) => {
     try {
-        // Assume you have 7 users with IDs from 1 to 7
         const userIds = [1, 2, 3, 4, 5, 6, 7];
         const results = [];
 
         for (const userId of userIds) {
-            const [name] = await pool.query('SELECT payer_name AS name FROM expenses WHERE payer = ?', [userId]);
-            const n = name[0].name;
+            const [nameResult] = await pool.query('SELECT payer_name AS name FROM expenses WHERE payer = ? LIMIT 1', [userId]);
+            const name = nameResult.length > 0 ? nameResult[0].name : 'Unknown';
 
             const [balanceResult] = await pool.query('SELECT SUM(amount) AS balance FROM expenses WHERE payer = ?', [userId]);
             const balance = balanceResult[0].balance || 0;

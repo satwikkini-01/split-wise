@@ -1,0 +1,16 @@
+.App-header {
+    text-align: center;
+  }
+  
+  .balance-info {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .balance-info p {
+    margin: 5px 0;
+  }
+  

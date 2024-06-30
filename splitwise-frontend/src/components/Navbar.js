@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './Navbar.css'
 
 const Navbar = () => {
   const [balances, setBalances] = useState([]);

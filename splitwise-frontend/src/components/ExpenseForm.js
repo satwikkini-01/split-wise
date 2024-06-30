@@ -53,7 +53,7 @@ const ExpenseForm = () => {
   };
 
   return (
-    <div className="expense-form">
+    <div className="expense-form" style={{height: "500px"}}>
       <h2>Add New Expense</h2>
       <form onSubmit={handleSubmit}>
         <div>

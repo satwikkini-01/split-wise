@@ -54,8 +54,8 @@ app.post('/api/expenses', async (req, res) => {
     const getBalParams = [p];
     const [balResult] = await connection.query(getBalQuery, getBalParams);
 
-    const currentOwe = balResult.length > 0 ? balResult[0].balance : 0;
-    const newOwe = currentOwe + amount;
+    const currentOwe = balResult.length > 0 ? parseFloat(balResult[0].balance) : 0;
+    const newOwe = currentOwe + parseFloat(amount);
 
     const balUpdateQuery = 'UPDATE balances SET balance = ? WHERE user_id = ?';
     const balUpdateParams = [newOwe, p];

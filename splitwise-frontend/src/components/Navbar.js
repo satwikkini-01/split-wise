@@ -31,7 +31,7 @@ const Navbar = () => {
             <p>Total Owed: ₹{parseFloat(userBalance.owed).toFixed(2)}</p>
 
             <div className='hide-time'>
-              <p>To Pay: {user.toPay}</p>
+              <p>To Pay: {userBalance.toPay}</p>
             </div>
           </div>
         ))}

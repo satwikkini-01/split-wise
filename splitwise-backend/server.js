@@ -7,7 +7,7 @@ const PORT = 3001;
 
 app.use(bodyParser.json());
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'https://split-wise-self.vercel.app/',
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type']
 }));

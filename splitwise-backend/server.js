@@ -106,14 +106,14 @@ app.get('/api/balance', async (req, res) => {
         const results = [];
 
         for (const userId of userIds) {
-            const [nameResult] = await pool.query('SELECT payer_name AS name FROM expenses WHERE payer = ? LIMIT 1', [userId]);
+            const [nameResult] = await pool.query('SELECT name FROM balances WHERE user_id = ? LIMIT 1', [userId]);
             const name = nameResult.length > 0 ? nameResult[0].name : 'Unknown';
 
-            const [balanceResult] = await pool.query('SELECT SUM(amount) AS balance FROM expenses WHERE payer = ?', [userId]);
+            const [balanceResult] = await pool.query('SELECT balance FROM balances WHERE user_id = ?', [userId]);
             const balance = balanceResult[0].balance || 0;
 
-            const [owedResult] = await pool.query('SELECT SUM(amount_paid) AS owed FROM expense_distribution WHERE participant = ?', [userId]);
-            const owed = owedResult[0].owed || 0;
+            const [owedResult] = await pool.query('SELECT owe FROM balances WHERE user_id = ?', [userId]);
+            const owed = owedResult[0].owe || 0;
 
             results.push({ userId, name, balance, owed });
         }

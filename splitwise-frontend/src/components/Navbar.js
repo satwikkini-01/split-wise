@@ -22,7 +22,7 @@ const Navbar = () => {
     <div className="Main-Header">
       <header className="App-header">
         <h1>Splitwise Clone</h1>
-        <div>
+        <div className='balances'>
         {balances.map((userBalance) => (
           <div key={userBalance.userId} className="balance-info">
             <p>User ID: {userBalance.userId}</p>

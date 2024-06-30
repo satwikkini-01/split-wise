@@ -20,3 +20,8 @@
   .Main-Header{
     height: 500px;
   }
+
+  .balances{
+    justify-content: center;
+    display: flex;
+  }

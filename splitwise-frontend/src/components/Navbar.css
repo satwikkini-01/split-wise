@@ -28,8 +28,7 @@
 
   .hide-time {
     display: none;
-    position: absolute;
-    bottom: -20px; /* Adjust as necessary */
+    bottom: -20px;
     left: 0;
     right: 0;
     background: #f0f0f0;

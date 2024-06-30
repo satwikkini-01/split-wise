@@ -6,10 +6,17 @@ const app = express();
 const PORT = 3001; 
 
 app.use(bodyParser.json());
+const allowedOrigins = ['https://split-wise-self.vercel.app'];
+
 app.use(cors({
-  origin: 'https://split-wise-self.vercel.app/',
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type']
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    }
 }));
 
 app.get('/api/users', async (req, res) => {

@@ -30,18 +30,41 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
+// Fetch all users
+app.get('/api/users', async (req, res) => {
+    try {
+      const [rows] = await pool.query('SELECT user_id, name FROM users');
+      const users = rows.map(user => ({ id: user.user_id, name: user.name }));
+      res.json({ users });
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
 app.post('/api/expenses', async (req, res) => {
-  const { payer, amount, participants, splitAmount } = req.body;
-  let p = 0;
-  if(payer === 'satwik') p = 1;
-  else if(payer === 'manu') p = 2;
-  else if(payer === 'chetan') p = 3;
-  else if(payer === 'kushal') p = 4;
-  else if(payer === 'krishna') p = 5;
-  else if(payer === 'rishikesh') p = 6;
-  else if(payer === 'prajna') p = 7;
+const { payer, amount, participants, splitAmount } = req.body;
+const userMap = {
+    satwik: 1,
+    manu: 2,
+    chetan: 3,
+    kushal: 4,
+    krishna: 5,
+    rishikesh: 6,
+    prajna: 7
+};
 
-  try {
+const p = userMap[payer];
+
+if (!p) {
+    return res.status(400).json({ error: 'Invalid payer' });
+}
+
+if (!Array.isArray(participants) || participants.some(participant => !userMap[participant])) {
+    return res.status(400).json({ error: 'Invalid participants' });
+}
+
+try {
     const connection = await pool.getConnection();
     await connection.beginTransaction();
 
@@ -53,53 +76,42 @@ app.post('/api/expenses', async (req, res) => {
     const getBalQuery = 'SELECT balance FROM balances WHERE user_id = ?';
     const getBalParams = [p];
     const [balResult] = await connection.query(getBalQuery, getBalParams);
-
-    const currentOwe = balResult.length > 0 ? parseFloat(balResult[0].balance) : 0;
-    const newOwe = currentOwe + parseFloat(amount);
+    const currentBalance = balResult.length > 0 ? parseFloat(balResult[0].balance) : 0;
+    const newBalance = currentBalance + parseFloat(amount);
 
     const balUpdateQuery = 'UPDATE balances SET balance = ? WHERE user_id = ?';
-    const balUpdateParams = [newOwe, p];
+    const balUpdateParams = [newBalance, p];
     await connection.query(balUpdateQuery, balUpdateParams);
 
-    const [recentExpense] = await connection.query('SELECT id FROM expenses ORDER BY id DESC LIMIT 1');
-    const recentExpenseId = recentExpense[0].id;
     for (let participant of participants) {
-        let participantId;
-        if(participant === 'satwik') participantId = 1;
-        else if(participant === 'manu') participantId = 2;
-        else if(participant === 'chetan') participantId = 3;
-        else if(participant === 'kushal') participantId = 4;
-        else if(participant === 'krishna') participantId = 5;
-        else if(participant === 'rishikesh') participantId = 6;
-        else if(participant === 'prajna') participantId = 7;
-        
-        const insertDistributionQuery = 'INSERT INTO expense_distribution (expense_id, participant, amount_paid, participant_name) VALUES (?, ?, ?, ?)';
-        const insertDistributionParams = [recentExpenseId, participantId, splitAmount, participant];
-        await connection.query(insertDistributionQuery, insertDistributionParams);
+    const participantId = userMap[participant];
+    const insertDistributionQuery = 'INSERT INTO expense_distribution (expense_id, participant, amount_paid, participant_name) VALUES (?, ?, ?, ?)';
+    const insertDistributionParams = [expenseId, participantId, splitAmount, participant];
+    await connection.query(insertDistributionQuery, insertDistributionParams);
 
-        const getBalQuery = 'SELECT owe FROM balances WHERE user_id = ?';
-        const getBalParams = [participantId];
-        const [balResult] = await connection.query(getBalQuery, getBalParams);
-        const currentOwe = balResult.length > 0 ? parseFloat(balResult[0].owe) : 0;
+    const getOweQuery = 'SELECT owe FROM balances WHERE user_id = ?';
+    const getOweParams = [participantId];
+    const [oweResult] = await connection.query(getOweQuery, getOweParams);
+    const currentOwe = oweResult.length > 0 ? parseFloat(oweResult[0].owe) : 0;
+    const newOwe = currentOwe + parseFloat(splitAmount);
 
-        const newOwe = currentOwe + parseFloat(splitAmount);
-
-        const balUpdateQuery = 'UPDATE balances SET owe = ? WHERE user_id = ?';
-        const balUpdateParams = [newOwe, participantId];
-        await connection.query(balUpdateQuery, balUpdateParams);
+    const oweUpdateQuery = 'UPDATE balances SET owe = ? WHERE user_id = ?';
+    const oweUpdateParams = [newOwe, participantId];
+    await connection.query(oweUpdateQuery, oweUpdateParams);
     }
 
     await connection.commit();
     connection.release();
 
     res.status(201).json({ message: 'Expense added successfully' });
-  } catch (error) {
+} catch (error) {
     console.error('Error adding expense:', error);
     await connection.rollback();
     connection.release();
     res.status(500).json({ error: 'Internal server error' });
-  }
+}
 });
+  
 
 app.get('/api/balance', async (req, res) => {
     try {

@@ -8,7 +8,7 @@ const ExpenseForm = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/api/users')
+    axios.get('https://split-wise-gvpp.onrender.com/api/users')
       .then(response => {
         setUsers(response.data.users);
       })
@@ -30,7 +30,7 @@ const ExpenseForm = () => {
         splitAmount: parseFloat(splitAmount.toFixed(2))
       };
 
-      const response = await axios.post('http://localhost:3001/api/expenses', expenseData);
+      const response = await axios.post('https://split-wise-gvpp.onrender.com/api/expenses', expenseData);
 
       console.log('Expense added:', response.data);
       

@@ -8,7 +8,7 @@ const Navbar = () => {
   useEffect(() => {
     const fetchBalance = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/balance');
+        const response = await axios.get('https://split-wise-gvpp.onrender.com/api/balance');
         const balance = response.data.balance || 0;
         const owed = response.data.owed || 0;
         setBalance(balance);

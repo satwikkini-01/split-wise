@@ -26,6 +26,7 @@ const Navbar = () => {
         {balances.map((userBalance) => (
           <div key={userBalance.userId} className="balance-info">
             <p>User ID: {userBalance.userId}</p>
+            <p>Name: {userBalance.name}</p>
             <p>Your Balance: ₹{parseFloat(userBalance.balance).toFixed(2)}</p>
             <p>Total Owed: ₹{parseFloat(userBalance.owed).toFixed(2)}</p>
           </div>

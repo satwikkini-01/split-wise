@@ -22,6 +22,7 @@ const Navbar = () => {
     <div className="Main-Header">
       <header className="App-header">
         <h1>Splitwise Clone</h1>
+        <div>
         {balances.map((userBalance) => (
           <div key={userBalance.userId} className="balance-info">
             <p>User ID: {userBalance.userId}</p>
@@ -29,6 +30,7 @@ const Navbar = () => {
             <p>Total Owed: ₹{parseFloat(userBalance.owed).toFixed(2)}</p>
           </div>
         ))}
+        </div>
       </header>
     </div>
     

@@ -85,8 +85,8 @@ try {
 
     for (let participant of participants) {
     const participantId = userMap[participant];
-    const insertDistributionQuery = 'INSERT INTO expense_distribution (expense_id, participant, amount_paid, participant_name) VALUES (?, ?, ?, ?)';
-    const insertDistributionParams = [expenseId, participantId, splitAmount, participant];
+    const insertDistributionQuery = 'INSERT INTO expense_distribution (expense_id, participant, amount_paid, participant_name, to_pay) VALUES (?, ?, ?, ?, ?)';
+    const insertDistributionParams = [expenseId, participantId, splitAmount, participant, payer];
     await connection.query(insertDistributionQuery, insertDistributionParams);
 
     const getOweQuery = 'SELECT owe FROM balances WHERE user_id = ?';
@@ -128,7 +128,10 @@ app.get('/api/balance', async (req, res) => {
             const [owedResult] = await pool.query('SELECT owe FROM balances WHERE user_id = ?', [userId]);
             const owed = owedResult[0].owe || 0;
 
-            results.push({ userId, name, balance, owed });
+            const [toPayResult] = await pool.query('SELECT to_pay FROM expense_distribution WHERE participant = ?', [userId]);
+            const toPay = toPayResult.length > 0 ? toPayResult.map(row => row.to_pay).join(', ') : '';
+
+            results.push({ userId, name, balance, owed, toPay });
         }
 
         res.json(results);

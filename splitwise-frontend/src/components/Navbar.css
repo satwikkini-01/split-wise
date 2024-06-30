@@ -25,3 +25,18 @@
     justify-content: center;
     display: flex;
   }
+
+  .hide-time {
+    display: none;
+    position: absolute;
+    bottom: -20px; /* Adjust as necessary */
+    left: 0;
+    right: 0;
+    background: #f0f0f0;
+    border-radius: 5px;
+    padding: 5px;
+  }
+  
+  .balance-info:hover .hide-time {
+    display: block;
+  }

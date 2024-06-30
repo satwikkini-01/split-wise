@@ -2,32 +2,31 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const Navbar = () => {
-  const [balance, setBalance] = useState(0);
-  const [owed, setOwed] = useState(0);
+  const [balances, setBalances] = useState([]);
 
   useEffect(() => {
-    const fetchBalance = async () => {
+    const fetchBalances = async () => {
       try {
         const response = await axios.get('https://split-wise-gvpp.onrender.com/api/balance');
-        const balance = response.data.balance || 0;
-        const owed = response.data.owed || 0;
-        setBalance(balance);
-        setOwed(owed);
+        setBalances(response.data);
       } catch (error) {
-        console.error('Error fetching balance:', error);
+        console.error('Error fetching balances:', error);
       }
     };
 
-    fetchBalance();
+    fetchBalances();
   }, []);
 
   return (
     <header className="App-header">
       <h1>Splitwise Clone</h1>
-      <div className="balance-info">
-        <p>Your Balance: ₹{parseFloat(balance).toFixed(2)}</p>
-        <p>Total Owed: ₹{parseFloat(owed).toFixed(2)}</p>
-      </div>
+      {balances.map((userBalance) => (
+        <div key={userBalance.userId} className="balance-info">
+          <p>User ID: {userBalance.userId}</p>
+          <p>Your Balance: ₹{parseFloat(userBalance.balance).toFixed(2)}</p>
+          <p>Total Owed: ₹{parseFloat(userBalance.owed).toFixed(2)}</p>
+        </div>
+      ))}
     </header>
   );
 };

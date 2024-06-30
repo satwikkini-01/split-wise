@@ -81,20 +81,27 @@ app.post('/api/expenses', async (req, res) => {
 
 app.get('/api/balance', async (req, res) => {
     try {
-      const userId = 1;
-  
-      const [balanceResult] = await pool.query('SELECT SUM(amount) AS balance FROM expenses WHERE payer = ?', [userId]);
-      const balance = balanceResult[0].balance || 0;
-  
-      const [owedResult] = await pool.query('SELECT SUM(amount_paid) AS owed FROM expense_distribution WHERE participant = ?', [userId]);
-      const owed = owedResult[0].owed || 0;
-  
-      res.json({ balance, owed });
+        // Assume you have 7 users with IDs from 1 to 7
+        const userIds = [1, 2, 3, 4, 5, 6, 7];
+        const results = [];
+
+        for (const userId of userIds) {
+            const [balanceResult] = await pool.query('SELECT SUM(amount) AS balance FROM expenses WHERE payer = ?', [userId]);
+            const balance = balanceResult[0].balance || 0;
+
+            const [owedResult] = await pool.query('SELECT SUM(amount_paid) AS owed FROM expense_distribution WHERE participant = ?', [userId]);
+            const owed = owedResult[0].owed || 0;
+
+            results.push({ userId, balance, owed });
+        }
+
+        res.json(results);
     } catch (error) {
-      console.error('Error fetching balance and owed:', error);
-      res.status(500).json({ error: 'Internal server error' });
+        console.error('Error fetching balance and owed for all users:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
-  });
+});
+
 
 app.listen(PORT, () => {
   console.log(`Backend server running on port ${PORT}`);

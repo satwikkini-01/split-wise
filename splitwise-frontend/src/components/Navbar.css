@@ -1,32 +1,36 @@
+* {
+    box-sizing: border-box;
+}
+
 .App-header {
     text-align: center;
-  }
-  
-  .balance-info {
+    width: 100%;
+    height: auto;
+}
+
+.balance-info {
     border: 1px solid #ddd;
     padding: 10px;
     margin: 10px;
     border-radius: 5px;
     background-color: #f9f9f9;
     color: black;
-    width: 200px;
-    height: 100px;
-  }
-  
-  .balance-info p {
+    width: auto;
+    height: auto;
+}
+
+.balance-info p {
     margin: 5px 0;
-  }
-  
-  .Main-Header{
-    height: 500px;
-  }
+}
 
-  .balances{
-    justify-content: center;
+
+.balances {
+    justify-content: space-between;
     display: flex;
-  }
+    flex-wrap: wrap;
+}
 
-  .hide-time {
+.hide-time {
     display: none;
     bottom: -20px;
     left: 0;
@@ -34,8 +38,80 @@
     background: #f0f0f0;
     border-radius: 5px;
     padding: 5px;
-  }
-  
-  .balance-info:hover .hide-time {
+}
+
+.balance-info:hover .hide-time {
     display: block;
-  }
+}
+
+.dropdown {
+    display: none;
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: lightblue;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    top: 100%;
+    left: 0;
+    border-radius: 5px;
+}
+
+.dropdown-content .balance-info {
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+}
+
+.dropdown-content p {
+    margin: 5px 0;
+}
+
+.dropdown-button {
+    display: none;
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.dropdown-button:focus + .dropdown-content,
+.dropdown-content:hover {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .balances {
+        display: none;
+    }
+
+    .dropdown {
+        display: block;
+    }
+
+    .dropdown-button {
+        display: block;
+    }
+}
+
+.positive {
+    color: green;
+}
+
+.negative {
+    color: red;
+}
+
+.zero {
+    color: blue;
+}
+
+.btn{
+    size: 50px;
+}

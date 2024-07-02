@@ -6,8 +6,8 @@ const app = express();
 const PORT = 3001; 
 
 app.use(bodyParser.json());
-// const allowedOrigins = ['https://split-wise-self.vercel.app'];
-const allowedOrigins = ['http://localhost:3000']
+const allowedOrigins = ['https://split-wise-self.vercel.app'];
+// const allowedOrigins = ['http://localhost:3000']
 
 function settleDebts(users) {
     const transactions = [];

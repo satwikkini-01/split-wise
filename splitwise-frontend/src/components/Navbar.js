@@ -13,7 +13,7 @@ const Navbar = () => {
 
     const fetchBalances = async () => {
         try {
-            const response = await axios.get('http://localhost:3001/api/balance');
+            const response = await axios.get('https://split-wise-gvpp.onrender.com/api/balance');
             setBalances(response.data);
         } catch (error) {
             console.error('Error fetching balances:', error);
@@ -33,7 +33,7 @@ const Navbar = () => {
     // Function to handle clearing settlements for a user
     const handlePaidClick = async (userId) => {
         try {
-            await axios.post(`http://localhost:3001/api/clear-settlements/${userId}`);
+            await axios.post(`https://split-wise-gvpp.onrender.com/api/clear-settlements/${userId}`);
             fetchBalances(); // Refresh balances after clearing settlements
         } catch (error) {
             console.error('Error clearing settlements:', error);

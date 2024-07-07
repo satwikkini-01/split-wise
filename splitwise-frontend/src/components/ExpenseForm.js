@@ -26,7 +26,9 @@ const ExpenseForm = () => {
         event.preventDefault();
 
         try {
-            window.location.reload();
+            setTimeout(() => {
+                window.location.reload();
+              }, 2000);
             const splitAmount = amount / participants.length;
 
             const expenseData = {

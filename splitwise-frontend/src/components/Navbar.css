@@ -3,6 +3,7 @@
 }
 
 .App-header {
+    background-color: #b3b4bd;
     text-align: center;
     width: 100%;
     height: auto;
@@ -25,7 +26,7 @@
 
 
 .balances {
-    justify-content: space-between;
+    justify-content: space-around;
     display: flex;
     flex-wrap: wrap;
 }
@@ -114,4 +115,8 @@
 
 .btn{
     size: 50px;
+}
+
+.head{
+    color: #141619;
 }

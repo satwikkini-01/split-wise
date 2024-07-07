@@ -1,11 +1,11 @@
 /* src/App.css */
-
 .App {
+  background-color: #2c2e3a;
   text-align: center;
+  height: 100vh;
 }
 
 .App-header {
-  background-color: #282c34;
   padding: 20px;
   color: white;
 }

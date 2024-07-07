@@ -30,20 +30,10 @@ const Navbar = () => {
         setDropdownOpen(!dropdownOpen);
     };
 
-    // Function to handle clearing settlements for a user
-    const handlePaidClick = async (userId) => {
-        try {
-            await axios.post(`https://split-wise-gvpp.onrender.com/api/clear-settlements/${userId}`);
-            fetchBalances(); // Refresh balances after clearing settlements
-        } catch (error) {
-            console.error('Error clearing settlements:', error);
-        }
-    };
-
     return (
         <div className="Main-Header">
             <header className="App-header">
-                <h1>Splitwise</h1>
+                <h1 className='head'>Splitwise</h1>
                 <div className="balances">
                     {balances.map((userBalance) => (
                         <div key={userBalance.userId} className="balance-info">
@@ -54,7 +44,6 @@ const Navbar = () => {
                             </p>
                             <div className="hide-time">
                                 <p>To Pay: {userBalance.toPay}</p>
-                                <button className='btn' onClick={() => handlePaidClick(userBalance.userId)}>Paid</button>
                             </div>
                         </div>
                     ))}
@@ -75,7 +64,7 @@ const Navbar = () => {
                                     <p>Total Owed: ₹{parseFloat(userBalance.owed).toFixed(2)}</p>
                                     <div className="hide-time">
                                         <p>To Pay: {userBalance.toPay}</p>
-                                        <button className='btn' onClick={() => handlePaidClick(userBalance.userId)}>Paid</button>
+    
                                     </div>
                                 </div>
                             ))}

@@ -1,3 +1,11 @@
+.expense-form{
+    color: #b3b4bd
+}
+
+.lbl{
+    color: #b3b4bd;
+}
+
 .btn{
     margin: 20px;
     padding: 10px;
@@ -8,5 +16,7 @@
 }
 
 .amt{
+    color: #141619;
+    font-weight: 500;
     margin: 10px 0px;
 }

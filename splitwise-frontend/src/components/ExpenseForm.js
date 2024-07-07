@@ -28,7 +28,7 @@ const ExpenseForm = () => {
         try {
             setTimeout(() => {
                 window.location.reload();
-              }, 2000);
+              }, 3000);
             const splitAmount = amount / participants.length;
 
             const expenseData = {
@@ -89,7 +89,7 @@ const ExpenseForm = () => {
                     </select>
                 </div>
                 <div className='amt'>
-                    <label>Amount:</label>
+                    <label className='lbl'>Amount:</label>
                     <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} required />
                 </div>
                 <div>
